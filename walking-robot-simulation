@@ -1,0 +1,43 @@
+https://leetcode.com/problems/walking-robot-simulation/description/
+
+class Solution {
+    public int robotSim(int[] commands, int[][] obstacles) {
+        int[] dx={0,1,0,-1};
+        int[] dy={1,0,-1,0};
+        int dir=0;
+        Set<String> set=new HashSet<>();
+        for(int[] ob:obstacles)
+        {
+            set.add(ob[0]+","+ob[1]);
+        }
+        int x=0,y=0;
+        int md=0;
+        for(int num:commands)
+        {
+            if(num==-2)
+            {
+                dir=(dir+3)%4;
+            }
+            else if(num==-1)
+            {
+                dir=(dir+1)%4;
+            }
+            else
+            {
+                for(int i=0;i<num;i++)
+                {
+                    int tx=x+dx[dir];
+                    int ty=y+dy[dir];
+                    if(set.contains(tx+","+ty))
+                    {
+                        break;
+                    }
+                    x=tx;
+                    y=ty;
+                    md=Math.max(md,x*x + y*y);
+                }
+            }
+        }
+        return md;
+    }
+}
