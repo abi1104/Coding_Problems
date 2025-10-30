@@ -1,0 +1,26 @@
+https://leetcode.com/problems/group-anagrams/
+
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        HashMap<String,List<String>> map=new HashMap<>();
+        for(String str:strs)
+        {
+            char[] ch=str.toCharArray();
+            Arrays.sort(ch);
+            String cur=new String(ch);
+            if(!map.containsKey(cur))
+            {
+                map.put(cur,new ArrayList<>());
+            }
+    
+            map.get(cur).add(str);
+        }
+        return new ArrayList<>(map.values());
+    }
+}
+
+✅ Final Complexity:
+
+Time: O(n * k log k)
+
+Space: O(n * k)
