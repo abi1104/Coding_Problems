@@ -1,0 +1,27 @@
+https://leetcode.com/problems/kth-largest-element-in-an-array/description/
+
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        Arrays.sort(nums);
+        int n=nums.length;
+        return nums[n-k];
+    }
+}
+
+
+import java.util.PriorityQueue;
+
+class Solution {
+    public int findKthLargest(int[] nums, int k) {
+        PriorityQueue<Integer> pq = new PriorityQueue<>(); // min-heap
+        
+        for (int num : nums) {
+            pq.offer(num); // add element
+            if (pq.size() > k) {
+                pq.poll(); // remove smallest if heap size > k
+            }
+        }
+        
+        return pq.peek(); // root = kth largest
+    }
+}
