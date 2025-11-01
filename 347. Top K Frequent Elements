@@ -1,0 +1,57 @@
+https://leetcode.com/problems/top-k-frequent-elements/description/
+
+bucket sort concept :
+
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        HashMap<Integer, Integer> freq = new HashMap<>();
+        for (int n : nums) freq.put(n, freq.getOrDefault(n, 0) + 1);
+
+        List<Integer>[] buckets = new List[nums.length + 1];
+        for (Map.Entry<Integer, Integer> e : freq.entrySet()) {
+            int num = e.getKey(), f = e.getValue();
+            if (buckets[f] == null) buckets[f] = new ArrayList<>();
+            buckets[f].add(num);
+        }
+
+        int[] ans = new int[k];
+        int idx = 0;
+        for (int f = buckets.length - 1; f >= 0 && idx < k; f--) {
+            if (buckets[f] != null) {
+                for (int v : buckets[f]) {
+                    ans[idx++] = v;
+                    if (idx == k) break;
+                }
+            }
+        }
+        return ans;
+    }
+}
+
+
+bruteforce:
+
+class Solution {
+    public int[] topKFrequent(int[] nums, int k) {
+        HashMap<Integer,Integer> map=new HashMap<>();
+        for(int num:nums)
+        {
+            if(!map.containsKey(num))
+            {
+                map.put(num,1);
+            }
+            else
+            {
+                map.put(num,map.get(num)+1);
+            }
+        }
+        List<Map.Entry<Integer, Integer>> list = new ArrayList<>(map.entrySet());
+        list.sort(Map.Entry.<Integer, Integer>comparingByValue().reversed());
+        int[] result = new int[k];
+        for (int i = 0; i < k; i++) {
+            result[i] = list.get(i).getKey();
+        }
+
+        return result;
+    }
+}
