@@ -1,0 +1,67 @@
+https://leetcode.com/problems/robot-collisions/description/
+
+
+class Solution {
+
+    static class Robot {
+        int index;
+        int position;
+        int health;
+        char direction;
+
+        Robot(int index, int position, int health, char direction) {
+            this.index = index;
+            this.position = position;
+            this.health = health;
+            this.direction = direction;
+        }
+    }
+
+    private void handleCollisions(Stack<Robot> st, Robot robot) {
+        while (!st.isEmpty() && st.peek().direction == 'R' && st.peek().health < robot.health) {
+            st.pop();
+            robot.health--;
+        }
+
+        if (!st.isEmpty() && st.peek().direction == 'R') {
+            if (st.peek().health == robot.health)
+                st.pop();
+            else
+                st.peek().health--;
+        } else {
+            st.push(robot);
+        }
+    }
+
+    public List<Integer> survivedRobotsHealths(int[] positions, int[] healths, String directions) {
+        int n = positions.length;
+        List<Robot> robots = new ArrayList<>();
+
+        for (int i = 0; i < n; i++) {
+            robots.add(new Robot(i, positions[i], healths[i], directions.charAt(i)));
+        }
+
+        robots.sort(Comparator.comparingInt(a -> a.position));
+
+        Stack<Robot> st = new Stack<>();
+        for (Robot robot : robots) {
+            if (robot.direction == 'R')
+                st.push(robot);
+            else
+                handleCollisions(st, robot);
+        }
+
+        robots.clear();
+        while (!st.isEmpty()) {
+            robots.add(st.pop());
+        }
+
+        robots.sort(Comparator.comparingInt(a -> a.index));
+
+        List<Integer> ans = new ArrayList<>();
+        for (Robot robot : robots)
+            ans.add(robot.health);
+
+        return ans;
+    }
+}
